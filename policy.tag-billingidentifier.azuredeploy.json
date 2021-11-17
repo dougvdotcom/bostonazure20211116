@@ -1,0 +1,47 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+    "contentVersion": "0.0.1.0",
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policyDefinitions",
+            "name": "require-tag-billingidentifier",
+            "apiVersion": "2019-09-01",
+            "properties": {
+                "displayName": "Require Billing Identifier Tag",
+                "policyType": "Custom",
+                "description": "Requires indexed assets to have a Billing Identifier tag with a value listed in the parameters.",
+                "metadata": {
+                    "category": "RequiredTags"
+                },
+                "mode": "Indexed",
+                "parameters": {
+                    "billid": {
+						"type": "array",
+						"allowedValues": [
+							"AQQHHA",
+							"AQQHHB",
+							"AQQHHZ"
+						]
+					}
+                },
+                "policyRule": {
+                    "if": {
+                        "anyOf": [
+							{
+								"field": "tags['BillingIdentifier']",
+								"exists": false
+							},
+							{
+								"field": "tags['BillingIdentifier']",
+								"notin": "[[parameters('billid')]"
+							}
+						]
+                    },
+                    "then": {
+                        "effect": "deny"
+                    }
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,28 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+    "contentVersion": "0.0.1.0",
+	"parameters": {
+		"policyDefinitionID": {
+			"type": "string",
+			"metadata": {
+				"description": "Specifies the ID of the policy definition or policy set definition being assigned."
+			}
+		},
+		"subscriptionID": {
+			"type": "string",
+			"metadata": {
+				"description": "Specifies the ID of the subscription to have scope."
+			}
+		}
+	},
+	"resources": [
+		{
+			"type": "Microsoft.Authorization/policyAssignments",
+			"apiVersion": "2019-09-01",
+			"properties": {
+				"scope": "[concat('/subscriptions/', parameters('subscriptionID'))]",
+				"policyDefinitionId": "[parameters('policyDefinitionID')]"
+			}
+		}
+	]
+}
